@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMQ</title>
+    <link rel="stylesheet" href="Quote.css">
+    <!-- Add Favicon -->
+    <link rel="icon" href="paper.png" type="image/png"> 
+
+    <!-- Link to External JS -->
+    <script src="Quote.js" defer></script> <!-- Use 'defer' for head inclusion -->
+
+    <!-- Font Links -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+    </div>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-circles">
+            <div class="loading-circle"></div>
+            <div class="loading-circle"></div>
+            <div class="loading-circle"></div>
+        </div>
+        <div class="loading-message">please wait...</div>
+    </div>
+
+    <div class="container" style="display:none;">
+        <h1>Smart Quotation</h1>
+
+        <!-- Panel 1: Client and Company Details -->
+        <div class="panel" id="panel1">
+            <div class="input-group">
+                <label for="clientName">Client Name</label>
+                <input type="text" id="clientName" placeholder="Enter Client Name" required>
+            </div>
+            <div class="input-group">
+                <label for="companyName">Company Name</label>
+                <input type="text" id="companyName" placeholder="Enter Company Name" required>
+            </div>
+            <button type="button" onclick="nextPanel(2)">Next</button>
+        </div>
+
+        <!-- Panel 2: Business Details and Service Description -->
+        <div class="panel" id="panel2" style="display:none;">
+            <div class="input-group">
+                <label for="businessDetails">Business Details</label>
+                <textarea id="businessDetails" placeholder="Enter Business Details" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="serviceDescription">Service Description</label>
+                <textarea id="serviceDescription" placeholder="Describe the Service" required></textarea>
+            </div>
+            <button type="button" onclick="nextPanel(1)">Previous</button>
+            <button type="button" onclick="nextPanel(3)">Next</button>
+        </div>
+
+        <!-- Panel 3: Pricing and Dates -->
+        <div class="panel" id="panel3" style="display:none;">
+            <div class="input-group">
+                <label for="price">Price (BWP)</label>
+                <input type="number" id="price" placeholder="Enter Price in BWP" required>
+            </div>
+            <div class="input-group">
+                <label for="quotationNumber">Quotation Number</label>
+                <input type="text" id="quotationNumber" placeholder="Enter Quotation Number" required>
+            </div>
+            <div class="input-group">
+                <label for="quoteExpiryDate">Quote Expiry Date</label>
+                <input type="date" id="quoteExpiryDate" required>
+            </div>
+            <div class="input-group">
+                <label for="quotationDate">Quotation Date</label>
+                <input type="date" id="quotationDate" required>
+            </div>
+            <button type="button" onclick="nextPanel(2)">Previous</button>
+            <button type="button" onclick="nextPanel(4)">Next</button>
+        </div>
+
+        <!-- Panel 4: Project Schedule, Terms, and Signature -->
+        <div class="panel" id="panel4" style="display:none;">
+            <div class="input-group">
+                <label for="projectSchedule">Project Schedule</label>
+                <textarea id="projectSchedule" placeholder="Enter Project Schedule" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="termsConditions">Terms and Conditions</label>
+                <textarea id="termsConditions" placeholder="Enter Terms and Conditions" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="termsPayment">Terms of Payment</label>
+                <textarea id="termsPayment" placeholder="Enter Terms of Payment" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="customerSignature">Customer Acceptance Signature</label>
+                <input type="text" id="customerSignature" placeholder="Enter Customer Signature" required>
+            </div>
+            <button type="button" onclick="nextPanel(3)">Previous</button>
+            <button type="button" onclick="nextPanel(5)">Next</button>
+        </div>
+
+        <!-- Panel 5: Email and Revisions -->
+        <div class="panel" id="panel5" style="display:none;">
+            <div class="input-group">
+                <label for="emailAddress">Email Address</label>
+                <input type="email" id="emailAddress" placeholder="Enter Email Address" required>
+            </div>
+            <div class="input-group">
+                <label for="revisions">Revisions</label>
+                <textarea id="revisions" placeholder="Enter Revisions" required></textarea>
+            </div>
+            <button type="button" onclick="nextPanel(4)">Previous</button>
+            <button type="button" onclick="generateQuotation()">Get Quotation</button>
+        </div>
+
+        <!-- Add this inside your quotationOutput div, before the table -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="removed bckgrnd.jpg" alt="Company Logo" style="max-width: 150px;">
+            <h4 style="margin: 0;">Botson Ware Company</h4>
+            <p style="margin: 0;">Plot 8WR4+JHX, Gaborone</p>
+            <p style="margin: 0;">+267 72692829</p>
+        </div>
+
+       <!-- Quotation Output Section -->
+        <div class="quotation-output" id="quotationOutput" style="display:none;">
+            <h2>Quotation</h2>
+            <table class="quotation-table">
+                <tr>
+                    <th>Client Name</th>
+                    <td id="outputClientName"></td>
+                </tr>
+                <tr>
+                    <th>Company Name</th>
+                    <td id="outputCompanyName"></td>
+                </tr>
+                <tr>
+                    <th>Business Details</th>
+                    <td id="outputBusinessDetails"></td>
+                </tr>
+                <tr>
+                    <th>Service Description</th>
+                    <td id="outputServiceDescription"></td>
+                </tr>
+                <tr>
+                    <th>Price (BWP)</th>
+                    <td id="outputPrice"></td>
+                </tr>
+                <tr>
+                    <th>Quotation Number</th>
+                    <td id="outputQuotationNumber"></td>
+                </tr>
+                <tr>
+                    <th>Quote Expiry Date</th>
+                    <td id="outputQuoteExpiryDate"></td>
+                </tr>
+                <tr>
+                    <th>Quotation Date</th>
+                    <td id="outputQuotationDate"></td>
+                </tr>
+                <tr>
+                    <th>Project Schedule</th>
+                    <td id="outputProjectSchedule"></td>
+                </tr>
+                <tr>
+                    <th>Terms and Conditions</th>
+                    <td id="outputTermsConditions"></td>
+                </tr>
+                <tr>
+                    <th>Terms of Payment</th>
+                    <td id="outputTermsPayment"></td>
+                </tr>
+                <tr>
+                    <th>Customer Acceptance Signature</th>
+                    <td id="outputCustomerSignature"></td>
+                </tr>
+                <tr>
+                    <th>Email Address</th>
+                    <td id="outputEmailAddress"></td>
+                </tr>
+                <tr>
+                    <th>Revisions</th>
+                    <td id="outputRevisions"></td>
+                </tr>
+            </table>
+        
+            <div class="button-group">
+                <button onclick="printQuotation()">Print</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Include html2canvas Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  
+</body>
+</html>
